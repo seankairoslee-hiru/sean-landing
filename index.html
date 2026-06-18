@@ -711,6 +711,8 @@
     .contact-btn.insta {
       background: #AED6F1;
       color: #2c3e50;
+      pointer-events: auto !important;
+      cursor: pointer !important;
     }
 
     /* ── 푸터 ── */
@@ -1116,7 +1118,7 @@
           <div class="contact-btn kakao" id="kakao-id-btn">💬 카카오톡 ID : seankairos</div>
 
           <!-- 인스타 버튼: href로 직접 연결 -->
-          <a href="https://instagram.com/sean.kairos" target="_blank" class="contact-btn insta">📸 인스타그램 @sean.kairos</a>
+          <a href="javascript:void(0);" onclick="openInstagram();" class="contact-btn insta">📸 인스타그램 @sean.kairos</a>
         </div>
       </div>
     </div>
