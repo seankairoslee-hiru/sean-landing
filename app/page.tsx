@@ -1,0 +1,474 @@
+'use client';
+
+import { useEffect } from 'react';
+
+export default function Home() {
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  }, []);
+
+  const switchTab = (tab: string, btn: HTMLElement) => {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    const element = document.getElementById('tab-' + tab);
+    if (element) element.classList.add('active');
+    btn.classList.add('active');
+  };
+
+  return (
+    <>
+      <style>{`
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+        :root {
+          --slate: #37474F;
+          --slate-dark: #1c2b33;
+          --slate-mid: #455A64;
+          --steel: #78909C;
+          --steel-light: #B0BEC5;
+          --cool-gray: #ECEFF1;
+          --light-gray: #F5F7F8;
+          --white: #ffffff;
+          --text: #263238;
+          --text-mid: #546E7A;
+          --text-light: #90A4AE;
+          --glass-bg: rgba(255,255,255,0.65);
+          --glass-border: rgba(255,255,255,0.25);
+          --shadow: 0 4px 20px rgba(55,71,79,0.1);
+        }
+
+        html { scroll-behavior: smooth; }
+        body {
+          font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          font-weight: 400;
+          color: var(--text);
+          background: var(--light-gray);
+          overflow-x: hidden;
+        }
+
+        .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; background: rgba(255,255,255,0.92); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(55,71,79,0.08); padding: 0 3rem; height: 64px; display: flex; align-items: center; justify-content: space-between; }
+        .nav-logo { font-size: 1.05rem; font-weight: 700; color: var(--slate); letter-spacing: 0.5px; }
+        .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+        .nav-links a { text-decoration: none; color: var(--text-mid); font-size: 0.85rem; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--slate); }
+        .nav-cta { background: var(--slate); color: var(--white) !important; padding: 0.5rem 1.3rem; border-radius: 8px; font-weight: 600 !important; transition: transform 0.2s, background 0.2s !important; }
+        .nav-cta:hover { background: var(--slate-mid) !important; transform: scale(1.04); }
+
+        #hero { min-height: 100vh; background: linear-gradient(140deg, #1c2b33 0%, #37474F 55%, #455A64 100%); display: flex; align-items: center; padding: 80px 3rem 5rem; position: relative; overflow: hidden; }
+        #hero::before { content: ''; position: absolute; width: 700px; height: 700px; background: radial-gradient(circle, rgba(120,144,156,0.18) 0%, transparent 65%); top: -150px; right: -100px; border-radius: 50%; pointer-events: none; }
+        #hero::after { content: ''; position: absolute; width: 400px; height: 400px; background: radial-gradient(circle, rgba(176,190,197,0.1) 0%, transparent 65%); bottom: -80px; left: 8%; border-radius: 50%; pointer-events: none; }
+
+        .hero-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 5rem; position: relative; z-index: 1; width: 100%; }
+        .hero-text { flex: 1; }
+        .hero-eyebrow { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(120,144,156,0.2); border: 1px solid rgba(176,190,197,0.3); color: var(--steel-light); padding: 0.4rem 1rem; border-radius: 100px; font-size: 0.78rem; font-weight: 500; letter-spacing: 1px; white-space: nowrap; margin-bottom: 1.8rem; }
+        .hero-title { font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 900; color: var(--white); line-height: 1.15; letter-spacing: -1px; margin-bottom: 1.2rem; }
+        .hero-title span { color: var(--steel-light); }
+        .hero-desc { font-size: 1rem; color: rgba(255,255,255,0.72); line-height: 1.9; max-width: 460px; margin-bottom: 2.5rem; }
+        .hero-desc strong { color: var(--steel-light); font-weight: 600; }
+        .hero-cta { display: inline-block; padding: 1rem 2.4rem; background: var(--white); color: var(--slate); text-decoration: none; font-size: 0.9rem; font-weight: 700; border-radius: 8px; margin-bottom: 2.8rem; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+        .hero-cta:hover { transform: scale(1.05); box-shadow: 0 8px 28px rgba(0,0,0,0.3); }
+
+        .hero-stats { display: flex; gap: 0; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 2rem; }
+        .stat-item { flex: 1; text-align: center; padding: 0 1.5rem; border-right: 1px solid rgba(255,255,255,0.12); }
+        .stat-item:first-child { padding-left: 0; }
+        .stat-item:last-child { border-right: none; }
+        .stat-num { font-size: 2rem; font-weight: 900; color: var(--white); line-height: 1; margin-bottom: 0.4rem; }
+        .stat-num span { font-size: 1rem; font-weight: 400; color: var(--steel-light); }
+        .stat-label { font-size: 0.75rem; color: rgba(255,255,255,0.5); font-weight: 400; letter-spacing: 0.5px; }
+
+        .hero-image { flex-shrink: 0; width: 300px; height: 380px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 20px 60px rgba(0,0,0,0.3); background: #ddd; display: flex; align-items: center; justify-content: center; color: #999; }
+
+        section { padding: 7rem 3rem; }
+        .section-inner { max-width: 1100px; margin: 0 auto; }
+        .section-eyebrow { font-size: 0.75rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--steel); margin-bottom: 0.7rem; }
+        .section-title { font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 700; color: var(--text); letter-spacing: -0.5px; line-height: 1.3; margin-bottom: 0.8rem; }
+        .section-title strong { color: var(--slate); }
+        .section-sub { font-size: 0.95rem; color: var(--text-mid); line-height: 1.8; margin-bottom: 3rem; }
+
+        #career { background: var(--white); }
+        .career-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+        .career-card { background: var(--glass-bg); border: 1px solid rgba(55,71,79,0.1); backdrop-filter: blur(10px); border-radius: 12px; padding: 2.5rem; box-shadow: var(--shadow); transition: transform 0.25s, box-shadow 0.25s; }
+        .career-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(55,71,79,0.14); }
+        .career-card-top { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1.2rem; border-bottom: 1px solid rgba(55,71,79,0.08); }
+        .career-card-icon { width: 44px; height: 44px; background: var(--cool-gray); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+        .career-card h3 { font-size: 0.95rem; font-weight: 700; color: var(--slate); letter-spacing: 0.3px; }
+        .career-card ul { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+        .career-card ul li { font-size: 0.9rem; color: var(--text-mid); padding-left: 1rem; position: relative; line-height: 1.6; }
+        .career-card ul li::before { content: ''; position: absolute; left: 0; top: 9px; width: 4px; height: 4px; background: var(--steel); border-radius: 50%; }
+
+        #features { background: var(--cool-gray); position: relative; overflow: hidden; }
+        #features::before { content: ''; position: absolute; width: 900px; height: 900px; background: radial-gradient(circle, rgba(55,71,79,0.04) 0%, transparent 60%); top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none; }
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; position: relative; z-index: 1; }
+        .feature-card { background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: blur(10px); border-radius: 12px; padding: 2.5rem; box-shadow: var(--shadow); transition: transform 0.25s, box-shadow 0.25s; }
+        .feature-card:hover { transform: scale(1.03); box-shadow: 0 12px 36px rgba(55,71,79,0.14); }
+        .feature-num { font-size: 3.5rem; font-weight: 900; color: rgba(55,71,79,0.08); line-height: 1; margin-bottom: 1rem; }
+        .feature-card h3 { font-size: 1rem; font-weight: 700; color: var(--slate); margin-bottom: 0.8rem; line-height: 1.5; }
+        .feature-card p { font-size: 0.88rem; color: var(--text-mid); line-height: 1.9; }
+        .feature-tag { display: inline-block; background: var(--slate); color: var(--white); font-size: 0.72rem; font-weight: 700; padding: 0.25rem 0.7rem; border-radius: 4px; margin-bottom: 1.2rem; letter-spacing: 0.5px; }
+
+        #curriculum { background: var(--white); }
+        .tab-buttons { display: flex; gap: 0.5rem; margin-bottom: 2rem; }
+        .tab-btn { padding: 0.7rem 1.8rem; background: var(--cool-gray); border: none; cursor: pointer; font-size: 0.85rem; font-weight: 500; color: var(--text-mid); font-family: 'Noto Sans KR', sans-serif; border-radius: 8px; transition: all 0.2s; }
+        .tab-btn.active { background: var(--slate); color: var(--white); font-weight: 700; }
+        .tab-btn:hover:not(.active) { background: var(--steel-light); color: var(--slate); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .curriculum-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        .curriculum-item { background: var(--cool-gray); border-radius: 10px; padding: 1.5rem 1.8rem; display: flex; gap: 1.2rem; align-items: flex-start; border: 1px solid transparent; transition: border-color 0.2s; }
+        .curriculum-item:hover { border-color: var(--steel-light); }
+        .curriculum-num { font-size: 1.6rem; font-weight: 900; color: rgba(55,71,79,0.15); line-height: 1; flex-shrink: 0; width: 32px; }
+        .curriculum-item h4 { font-size: 0.92rem; font-weight: 700; color: var(--slate); margin-bottom: 0.4rem; }
+        .curriculum-item p { font-size: 0.82rem; color: var(--text-mid); line-height: 1.7; }
+
+        #reviews { background: var(--cool-gray); }
+        .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .review-card { background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: blur(10px); border-radius: 12px; padding: 0; box-shadow: var(--shadow); transition: transform 0.25s; overflow: hidden; min-height: 300px; background: #ddd; display: flex; align-items: center; justify-content: center; color: #999; }
+        .review-card:hover { transform: translateY(-4px); }
+
+        #diff { background: linear-gradient(140deg, #1c2b33 0%, #37474F 100%); position: relative; overflow: hidden; }
+        #diff::before { content: ''; position: absolute; width: 800px; height: 800px; background: radial-gradient(circle, rgba(120,144,156,0.12) 0%, transparent 65%); top: -200px; right: -200px; border-radius: 50%; pointer-events: none; }
+        #diff .section-eyebrow { color: var(--steel-light); }
+        #diff .section-title { color: var(--white); }
+        #diff .section-title strong { color: var(--steel-light); }
+        #diff .section-sub { color: rgba(255,255,255,0.55); }
+        .diff-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; position: relative; z-index: 1; }
+        .diff-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 12px; padding: 2.5rem; transition: background 0.3s, transform 0.25s; }
+        .diff-card:hover { background: rgba(255,255,255,0.1); transform: translateY(-4px); }
+        .diff-icon { font-size: 2rem; margin-bottom: 1.2rem; }
+        .diff-card h3 { font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 0.8rem; line-height: 1.5; }
+        .diff-card p { font-size: 0.88rem; color: rgba(255,255,255,0.6); line-height: 1.9; }
+
+        #contact { background: var(--white); }
+        .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+        .contact-text h2 { font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 1rem; }
+        .contact-text h2 strong { color: var(--slate); }
+        .contact-text p { font-size: 0.95rem; color: var(--text-mid); line-height: 1.9; }
+        .contact-buttons { display: flex; flex-direction: column; gap: 1rem; }
+        .contact-btn { display: flex; align-items: center; justify-content: center; gap: 0.8rem; padding: 1.1rem 2rem; text-decoration: none; font-size: 0.9rem; font-weight: 700; border-radius: 8px; transition: transform 0.2s, box-shadow 0.2s; }
+        .contact-btn:hover { transform: scale(1.03); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+        .contact-btn.kakao-channel { background: #FEE500; color: #3A1D1D; }
+        .contact-btn.kakao { background: var(--slate); color: var(--white); }
+        .contact-btn.insta { background: var(--cool-gray); color: var(--text); }
+
+        footer { background: var(--slate-dark); color: rgba(255,255,255,0.35); text-align: center; padding: 2.5rem; font-size: 0.8rem; line-height: 2; letter-spacing: 0.3px; }
+
+        .floating-cta { position: fixed; bottom: 2rem; right: 2rem; z-index: 100; display: flex; flex-direction: column; gap: 0.6rem; align-items: flex-end; }
+        .floating-btn { display: flex; align-items: center; justify-content: center; gap: 0.6rem; padding: 0.8rem 1.4rem; width: 140px; border-radius: 8px; text-decoration: none; font-size: 0.82rem; font-weight: 700; box-shadow: 0 4px 16px rgba(0,0,0,0.15); transition: transform 0.2s, box-shadow 0.2s; }
+        .floating-btn:hover { transform: scale(1.06); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+        .floating-btn.kakao { background: #FEE500; color: #3A1D1D; }
+        .floating-btn.consult { background: var(--slate); color: var(--white); }
+
+        @media (max-width: 768px) {
+          nav { padding: 0 1.2rem; }
+          .nav-links { display: none; }
+          section { padding: 4rem 1.2rem; }
+          #hero { padding: 80px 1.2rem 4rem; }
+          .hero-inner { flex-direction: column-reverse; gap: 2rem; }
+          .hero-image { width: 160px; height: 200px; align-self: center; }
+          .hero-title { font-size: 1.8rem; }
+          .hero-desc { font-size: 0.92rem; }
+          .section-title { font-size: 1.45rem; }
+          h1, h2, h3, p, span, a { word-break: keep-all; }
+          .hero-cta { width: 100%; text-align: center; }
+          .hero-stats { gap: 0; }
+          .stat-item { padding: 0 0.8rem; }
+          .stat-num { font-size: 1.5rem; }
+          #hero { overflow: hidden; }
+          .hero-text { padding: 0 1rem; }
+          .hero-eyebrow { font-size: 0.72rem; letter-spacing: 0.5px; max-width: 100%; overflow: hidden; display: flex; width: fit-content; margin-left: auto; margin-right: auto; }
+          .career-grid { grid-template-columns: 1fr; }
+          .career-card { padding: 1.2rem; }
+          .career-card ul li { font-size: 0.84rem; padding-left: 0.8rem; }
+          .features-grid { grid-template-columns: 1fr; }
+          .feature-card { padding: 1.5rem; }
+          .feature-card p { font-size: 0.78rem; }
+          .diff-grid { grid-template-columns: 1fr; }
+          .diff-card { padding: 1.5rem; }
+          .diff-card p { font-size: 0.78rem; }
+          .reviews-grid { grid-template-columns: 1fr; }
+          .curriculum-list { grid-template-columns: 1fr; }
+          .contact-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+          .tab-buttons { flex-wrap: nowrap; gap: 0.4rem; }
+          .tab-btn { padding: 0.5rem 0.8rem; font-size: 0.85rem; white-space: nowrap; flex: 1; text-align: center; }
+          .floating-cta { bottom: 0.8rem; right: 0.8rem; left: 0.8rem; flex-direction: row; align-items: stretch; }
+          .floating-btn { flex: 1; width: 0; font-size: 0.8rem; padding: 0.75rem 0.8rem; }
+        }
+      `}</style>
+
+      <nav>
+        <div className="nav-logo">이세경 지구과학 · 통합과학</div>
+        <ul className="nav-links">
+          <li><a href="#career">경력</a></li>
+          <li><a href="#features">수업 특징</a></li>
+          <li><a href="#curriculum">커리큘럼</a></li>
+          <li><a href="#reviews">후기</a></li>
+          <li><a href="#contact" className="nav-cta">수강 신청</a></li>
+        </ul>
+      </nav>
+
+      <section id="hero">
+        <div className="hero-inner">
+          <div className="hero-text">
+            <div className="hero-eyebrow">서울대학교 자연과학부(현 지구환경과학부) 졸업</div>
+            <h1 className="hero-title">이세경<span>T</span><br/>지구과학<br/>통합과학</h1>
+            <p className="hero-desc">
+              <span style={{fontSize:'1.2rem', fontWeight:'700'}}><span style={{fontSize:'1.35rem', color:'#80DEEA'}}>명쾌한</span> 유형 정리</span><br/>
+              <span style={{fontSize:'1.2rem', fontWeight:'700'}}><span style={{fontSize:'1.35rem', color:'#90CAF9'}}>빠르고</span> 정확한 풀이</span><br/>
+              <span style={{fontSize:'1.2rem', fontWeight:'700'}}><span style={{fontSize:'1.35rem', color:'#FFD54F'}}>높은</span> 시험 적중률</span><br/><br/>
+              <strong style={{color:'#80DEEA'}}>이세경T</strong>와 함께라면<br/>
+              지구과학 · 통합과학 내신이<br/>
+              <strong style={{color:'#FFD54F'}}>비약적으로</strong> 달라집니다.
+            </p>
+            <a href="#contact" className="hero-cta">무료 상담 신청 →</a>
+
+            <div className="hero-stats">
+              <div className="stat-item">
+                <div className="stat-num">70<span>%</span></div>
+                <div className="stat-label">시험 적중률</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-num">SKY<span>+</span></div>
+                <div className="stat-label">명문대 진학</div>
+              </div>
+              <div className="stat-item">
+                <div className="stat-num">95<span>%</span></div>
+                <div className="stat-label">성적 향상률</div>
+              </div>
+            </div>
+          </div>
+          <div className="hero-image">프로필 이미지</div>
+        </div>
+      </section>
+
+      <section id="career">
+        <div className="section-inner reveal">
+          <p className="section-eyebrow">Career</p>
+          <h2 className="section-title">검증된 <strong>학력과 경력</strong></h2>
+          <p className="section-sub">전공자만이 전달할 수 있는<br/>깊이 있는 지식으로 가르칩니다.</p>
+
+          <div className="career-grid">
+            <div className="career-card">
+              <div className="career-card-top">
+                <div className="career-card-icon">🎓</div>
+                <h3>학력</h3>
+              </div>
+              <ul>
+                <li>서울대학교 지구환경과학부 졸업</li>
+                <li>전공 기반의 깊이 있는 강의와 컨텐츠</li>
+              </ul>
+            </div>
+
+            <div className="career-card">
+              <div className="career-card-top">
+                <div className="career-card-icon">🏫</div>
+                <h3>소속 학원</h3>
+              </div>
+              <ul>
+                <li>시대인재</li>
+                <li>다원교육</li>
+                <li>세정학원</li>
+              </ul>
+            </div>
+
+            <div className="career-card">
+              <div className="career-card-top">
+                <div className="career-card-icon">📚</div>
+                <h3>강의 과목</h3>
+              </div>
+              <ul>
+                <li>통합과학 — 고1 내신 전문</li>
+                <li>지구과학 — 고2·3 내신 전문</li>
+              </ul>
+            </div>
+
+            <div className="career-card">
+              <div className="career-card-top">
+                <div className="career-card-icon">🏆</div>
+                <h3>수강생 성과</h3>
+              </div>
+              <ul>
+                <li>다수의 성적 향상 사례 보유</li>
+                <li>SKY 포함 명문대 진학생 다수 배출</li>
+                <li>오랜 강의 경력의 검증된 노하우</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="features">
+        <div className="section-inner reveal">
+          <p className="section-eyebrow">Why 이세경T</p>
+          <h2 className="section-title" style={{whiteSpace:'nowrap'}}>이세경T만의 <strong>세 가지 차별점</strong></h2>
+          <p className="section-sub">전공자 출신의 경험에서 나오는<br/>차별화된 강의입니다.</p>
+
+          <div className="features-grid">
+            <div className="feature-card">
+              <div className="feature-num">01</div>
+              <div className="feature-tag">개념 정리</div>
+              <h3>유형 정리를 통한<br/>명쾌한 개념 정리</h3>
+              <p>복잡한 내용도 유형별로 체계화하여<br/>한눈에 이해할 수 있도록 정리합니다.<br/>한 번 잡히면 절대 잊어버리지 않습니다.</p>
+            </div>
+
+            <div className="feature-card">
+              <div className="feature-num">02</div>
+              <div className="feature-tag">문제 풀이</div>
+              <h3>기존 해설보다<br/>빠르고 정확한 풀이</h3>
+              <p>전공자만이 알 수 있는<br/>핵심을 꿰뚫는 풀이법으로<br/>시간을 줄이고<br/>정확도를 높입니다.<br/>시험장에서도 바로 적용 가능합니다.</p>
+            </div>
+
+            <div className="feature-card">
+              <div className="feature-num">03</div>
+              <div className="feature-tag">시험 적중</div>
+              <h3>높은 시험 적중률로<br/>비약적인 성적 향상</h3>
+              <p>오랜 강의 경력에서 쌓아온<br/>출제 패턴 분석으로<br/>높은 적중률을 자랑합니다.<br/>수강생의 성적 향상이 이를 증명합니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="curriculum">
+        <div className="section-inner reveal">
+          <p className="section-eyebrow">Curriculum</p>
+          <h2 className="section-title">과목별 <strong>커리큘럼</strong></h2>
+          <p className="section-sub">내신 완성을 위한 체계적인 커리큘럼입니다.</p>
+
+          <div className="tab-buttons">
+            <button className="tab-btn active" onClick={(e) => switchTab('integrated', e.currentTarget)}>통합과학 (고1)</button>
+            <button className="tab-btn" onClick={(e) => switchTab('earth', e.currentTarget)}>지구과학 (고2·3)</button>
+          </div>
+
+          <div className="tab-content active" id="tab-integrated">
+            <div className="curriculum-list">
+              <div className="curriculum-item">
+                <div className="curriculum-num">01</div>
+                <div><h4>물질과 규칙성</h4><p>원소의 주기성, 화학 결합, 물질의 규칙성 완벽 정리</p></div>
+              </div>
+              <div className="curriculum-item">
+                <div className="curriculum-num">02</div>
+                <div><h4>시스템과 상호작용</h4><p>지구 시스템, 생명 시스템, 역학적 시스템 연결 이해</p></div>
+              </div>
+              <div className="curriculum-item">
+                <div className="curriculum-num">03</div>
+                <div><h4>변화와 다양성</h4><p>화학 반응, 진화와 다양성,<br/>지질 시대 유형별 정리</p></div>
+              </div>
+              <div className="curriculum-item">
+                <div className="curriculum-num">04</div>
+                <div><h4>환경과 에너지</h4><p>생태계와 환경, 발전과 에너지 내신 출제 패턴 집중 분석</p></div>
+              </div>
+            </div>
+          </div>
+
+          <div className="tab-content" id="tab-earth">
+            <div className="curriculum-list">
+              <div className="curriculum-item">
+                <div className="curriculum-num">01</div>
+                <div><h4>대기와 해양</h4><p>해수의 성질과 순환, 기압, 태풍, 상호작용, 기후 변화</p></div>
+              </div>
+              <div className="curriculum-item">
+                <div className="curriculum-num">02</div>
+                <div><h4>지구의 역사</h4><p>지층의 나이, 지질 시대, 화성암, 퇴적암, 변성암</p></div>
+              </div>
+              <div className="curriculum-item">
+                <div className="curriculum-num">03</div>
+                <div><h4>우주</h4><p>겉보기 운동, 식 현상,<br/>별의 물리량, 별의 진화,<br/>은하, 우주의 진화</p></div>
+              </div>
+              <div className="curriculum-item">
+                <div className="curriculum-num">04</div>
+                <div><h4>시험 대비 특강</h4><p>학교별 기출 패턴, 유형 정리,<br/>고난이도 정리, 적중 예상 풀이</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="reviews">
+        <div className="section-inner">
+          <p className="section-eyebrow">Reviews</p>
+          <h2 className="section-title">수강생 <strong>후기</strong></h2>
+          <p className="section-sub">이세경T의 수업을 들은 학생들의 이야기입니다.</p>
+          <div className="reviews-grid">
+            <div className="review-card">후기 이미지 1</div>
+            <div className="review-card">후기 이미지 2</div>
+            <div className="review-card">후기 이미지 3</div>
+            <div className="review-card">후기 이미지 4</div>
+            <div className="review-card">후기 이미지 5</div>
+            <div className="review-card">후기 이미지 6</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="diff">
+        <div className="section-inner reveal">
+          <p className="section-eyebrow">Difference</p>
+          <h2 className="section-title">다른 강의와 <strong>다른 점</strong></h2>
+          <p className="section-sub">이세경T를 선택해야 하는 이유입니다.</p>
+
+          <div className="diff-grid">
+            <div className="diff-card">
+              <div className="diff-icon">🔬</div>
+              <h3>전공자만의 깊이</h3>
+              <p>서울대 지구환경과학부 출신으로<br/>단순 암기가 아닌 진짜 원리를 가르칩니다.<br/>교과서 너머의 지식이 내신을 완성합니다.</p>
+            </div>
+            <div className="diff-card">
+              <div className="diff-icon">📐</div>
+              <h3>정확한 유형 분류</h3>
+              <p>수많은 문제를 명확한 유형으로<br/>분류하여 어떤 문제가 나와도<br/>풀 수 있는 체계를 만들어 드립니다.</p>
+            </div>
+            <div className="diff-card">
+              <div className="diff-icon">🎯</div>
+              <h3>검증된 적중률</h3>
+              <p>오랜 강의 경력에서 축적된<br/>출제 패턴 분석으로<br/>높은 시험 적중률을 자랑합니다.<br/>성과가 증명합니다.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact">
+        <div className="section-inner reveal">
+          <div className="contact-inner">
+            <div className="contact-text">
+              <p className="section-eyebrow">Contact</p>
+              <h2>지금 바로<br/><strong>상담 신청</strong>하세요</h2>
+              <div style={{width:'40px', height:'3px', background:'var(--steel)', margin:'1rem 0 1.2rem', borderRadius:'2px'}}></div>
+              <p>수강 문의, 커리큘럼 안내, 학원별 일정 등<br/>무엇이든 편하게 문의해주세요.</p>
+            </div>
+
+            <div className="contact-buttons">
+              <a href="http://pf.kakao.com/_xgajNxj" target="_blank" rel="noopener noreferrer" className="contact-btn kakao-channel">
+                💛 카카오톡 채널 상담
+              </a>
+              <a href="https://open.kakao.com/me/seankairos" target="_blank" rel="noopener noreferrer" className="contact-btn kakao">
+                💬 카카오톡 1:1 문의
+              </a>
+              <a href="https://instagram.com/sean.kairos" target="_blank" rel="noopener noreferrer" className="contact-btn insta">
+                📸 인스타그램 @sean.kairos
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <p>이세경 T · 지구과학 · 통합과학</p>
+        <p>시대인재 · 다원교육 · 세정학원</p>
+        <p style={{marginTop:'0.4rem'}}>© 2025 이세경T. All rights reserved.</p>
+      </footer>
+
+      <div className="floating-cta">
+        <a href="http://pf.kakao.com/_xgajNxj" target="_blank" rel="noopener noreferrer" className="floating-btn kakao">💛 채널 상담</a>
+        <a href="#contact" className="floating-btn consult">무료 상담 신청</a>
+      </div>
+    </>
+  );
+}
