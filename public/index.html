@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>이세경T | 지구과학 · 통합과학</title>
+  <title>이세경 과학</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <script>
     (function() {
       if (window.location.search) {
@@ -14,8 +15,6 @@
       }
     })();
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -39,7 +38,7 @@
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Noto Sans KR', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
       font-weight: 400;
       color: var(--text);
       background: var(--light-gray);
@@ -686,6 +685,13 @@
       font-weight: 700;
       border-radius: 8px;
       transition: transform 0.2s, box-shadow 0.2s;
+      pointer-events: auto !important;
+      cursor: pointer !important;
+    }
+
+    .contact-btn.insta {
+      pointer-events: auto !important;
+      cursor: pointer !important;
     }
 
     .contact-btn:hover {
@@ -694,18 +700,20 @@
     }
 
     .contact-btn.kakao-channel {
-      background: #FEE500;
-      color: #3A1D1D;
+      background: #A8D5BA;
+      color: #2c3e50;
     }
 
     .contact-btn.kakao {
-      background: var(--slate);
-      color: var(--white);
+      background: #EAB2B2;
+      color: #2c3e50;
     }
 
     .contact-btn.insta {
-      background: var(--cool-gray);
-      color: var(--text);
+      background: #AED6F1;
+      color: #2c3e50;
+      pointer-events: auto !important;
+      cursor: pointer !important;
     }
 
     /* ── 푸터 ── */
@@ -737,7 +745,7 @@
       justify-content: center;
       gap: 0.6rem;
       padding: 0.8rem 1.4rem;
-      width: 140px;
+      width: 160px;
       border-radius: 8px;
       text-decoration: none;
       font-size: 0.82rem;
@@ -751,8 +759,8 @@
       box-shadow: 0 8px 24px rgba(0,0,0,0.2);
     }
 
-    .floating-btn.kakao { background: #FEE500; color: #3A1D1D; }
-    .floating-btn.consult { background: var(--slate); color: var(--white); }
+    .floating-btn.kakao { background: #A8D5BA; color: #2c3e50; }
+    .floating-btn.consult { background: #EAB2B2; color: #2c3e50; }
 
     /* ── 반응형 ── */
     @media (max-width: 768px) {
@@ -806,6 +814,9 @@
         width: 0;
         font-size: 0.8rem;
         padding: 0.75rem 0.8rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
   </style>
@@ -829,12 +840,12 @@
     <div class="hero-inner">
       <div class="hero-text">
         <div class="hero-eyebrow">서울대학교 자연과학부(현 지구환경과학부) 졸업</div>
-        <h1 class="hero-title">이세경<span>T</span><br>지구과학<br>통합과학</h1>
+        <h1 class="hero-title">이세경<br>지구과학<br>통합과학</h1>
         <p class="hero-desc">
           <span style="font-size:1.2rem; font-weight:700;"><span style="font-size:1.35rem; color:#80DEEA;">명쾌한</span> 유형 정리</span><br>
           <span style="font-size:1.2rem; font-weight:700;"><span style="font-size:1.35rem; color:#90CAF9;">빠르고</span> 정확한 풀이</span><br>
           <span style="font-size:1.2rem; font-weight:700;"><span style="font-size:1.35rem; color:#FFD54F;">높은</span> 시험 적중률</span><br><br>
-          <strong style="color:#80DEEA">이세경T</strong>와 함께라면<br>
+          <strong style="color:#80DEEA">이세경 과학</strong>과 함께라면<br>
           지구과학 · 통합과학 내신이<br>
           <strong style="color:#FFD54F">비약적으로</strong> 달라집니다.
         </p>
@@ -858,7 +869,7 @@
       </div>
 
       <div class="hero-image">
-        <img src="profile.jpg" alt="이세경T 프로필">
+        <img src="profile.jpg" alt="이세경 과학 프로필">
       </div>
     </div>
   </section>
@@ -877,7 +888,7 @@
             <h3>학력</h3>
           </div>
           <ul>
-            <li>서울대학교 지구환경과학부 졸업</li>
+            <li>서울대학교 자연과학부 졸업</li>
             <li>전공 기반의 깊이 있는 강의와 컨텐츠</li>
           </ul>
         </div>
@@ -923,9 +934,9 @@
   <!-- 수업 특징 -->
   <section id="features">
     <div class="section-inner reveal">
-      <p class="section-eyebrow">Why 이세경T</p>
-      <h2 class="section-title" style="white-space:nowrap">이세경T만의 <strong>세 가지 차별점</strong></h2>
-      <p class="section-sub">전공자 출신의 경험에서 나오는<br>차별화된 강의입니다.</p>
+      <p class="section-eyebrow">Why 「이세경 과학」</p>
+      <h2 class="section-title" style="white-space:nowrap"><strong style="color:#1976D2">이세경 과학</strong>만의 <strong>세 가지 차별점</strong></h2>
+      <p class="section-sub">전공자 출신의 경험에서 나오는 차별화된 강의입니다.</p>
 
       <div class="features-grid">
         <div class="feature-card">
@@ -1037,7 +1048,7 @@
     <div class="section-inner">
       <p class="section-eyebrow">Reviews</p>
       <h2 class="section-title">수강생 <strong>후기</strong></h2>
-      <p class="section-sub">이세경T의 수업을 들은 학생들의 이야기입니다.</p>
+      <p class="section-sub"><strong style="color:#1976D2">이세경 과학</strong>의 수업을 들은 학생들의 이야기입니다.</p>
 
       <div class="reviews-grid">
         <div class="review-card">
@@ -1073,13 +1084,13 @@
     <div class="section-inner reveal">
       <p class="section-eyebrow">Difference</p>
       <h2 class="section-title">다른 강의와 <strong>다른 점</strong></h2>
-      <p class="section-sub">이세경T를 선택해야 하는 이유입니다.</p>
+      <p class="section-sub"><strong style="color:#80DEEA">이세경 과학</strong>을 선택해야 하는 이유입니다.</p>
 
       <div class="diff-grid">
         <div class="diff-card">
           <div class="diff-icon">🔬</div>
           <h3>전공자만의 깊이</h3>
-          <p>서울대 지구환경과학부 출신으로<br>단순 암기가 아닌 진짜 원리를 가르칩니다.<br>교과서 너머의 지식이 내신을 완성합니다.</p>
+          <p>서울대 자연과학부 출신으로<br>단순 암기가 아닌 진짜 원리를 가르칩니다.<br>교과서 너머의 지식이 내신을 완성합니다.</p>
         </div>
         <div class="diff-card">
           <div class="diff-icon">📐</div>
@@ -1107,15 +1118,11 @@
         </div>
 
         <div class="contact-buttons">
-          <a href="http://pf.kakao.com/_xgajNxj" target="_blank" class="contact-btn kakao-channel">
-            💛 카카오톡 채널 상담
-          </a>
-          <a href="https://open.kakao.com/me/seankairos" target="_blank" class="contact-btn kakao">
-            💬 카카오톡 1:1 문의
-          </a>
-          <a href="https://instagram.com/sean.kairos" target="_blank" class="contact-btn insta">
-            📸 인스타그램 @sean.kairos
-          </a>
+          <a href="http://pf.kakao.com/_xgajNxj" target="_self" class="contact-btn kakao-channel">💬 카카오톡 채널 상담</a>
+          <div class="contact-btn kakao" id="kakao-id-btn">📱 카카오톡 ID : seankairos</div>
+
+          <!-- 인스타 버튼 -->
+          <a href="javascript:void(0);" onclick="openInstagram();" class="contact-btn insta">📷 인스타그램 @sean.kairos</a>
         </div>
       </div>
     </div>
@@ -1123,15 +1130,15 @@
 
   <!-- 푸터 -->
   <footer>
-    <p>이세경 T · 지구과학 · 통합과학</p>
+    <p>이세경 과학 · 지구과학 · 통합과학</p>
     <p>시대인재 · 다원교육 · 세정학원</p>
-    <p style="margin-top:0.4rem;">© 2025 이세경T. All rights reserved.</p>
+    <p style="margin-top:0.4rem;">© 2025 이세경 과학. All rights reserved.</p>
   </footer>
 
   <!-- 플로팅 CTA -->
   <div class="floating-cta">
-    <a href="http://pf.kakao.com/_xgajNxj" target="_blank" class="floating-btn kakao">💛 채널 상담</a>
-    <a href="#contact" class="floating-btn consult">무료 상담 신청</a>
+    <a href="http://pf.kakao.com/_xgajNxj" target="_blank" class="floating-btn kakao">💬 카카오톡 채널</a>
+    <a href="#contact" class="floating-btn consult">📱 seankairos</a>
   </div>
 
   <script>
@@ -1152,5 +1159,28 @@
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   </script>
+
+  <script type="text/javascript">
+    (function() {
+      // 1. 카톡 채널 상담 버튼 안전장치
+      var channelBtn = document.querySelector('.kakao-channel');
+      if (channelBtn) {
+        channelBtn.setAttribute('target', '_self');
+      }
+
+      // 2. 카톡 ID 버튼 제어
+      var idBtn = document.getElementById('kakao-id-btn');
+      if (idBtn) {
+        idBtn.addEventListener('click', function() {
+          if (typeof openKakaoModal === 'function') { openKakaoModal(); }
+        });
+      }
+    })();
+
+    // 인스타그램 새 창 열기
+    function openInstagram() {
+      window.open("https://instagram.com/sean.kairos", "_blank", "noopener, noreferrer");
+    }
+  </script>
 </body>
-</html> 
+</html>
